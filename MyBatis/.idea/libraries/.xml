@@ -1,0 +1,33 @@
+<component name="libraryTable">
+  <library name="我的开发库">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/我的当前开发库/aopalliance.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/我的当前开发库/aspectjweaver.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/我的当前开发库/commons-collections-3.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/我的当前开发库/commons-dbcp-1.2.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/我的当前开发库/commons-logging.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/我的当前开发库/commons-pool.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/我的当前开发库/jstl.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/我的当前开发库/mybatis-3.2.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/我的当前开发库/mybatis-spring-1.2.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/我的当前开发库/mysql-connector-java-5.1.34-bin.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/我的当前开发库/spring-aop-3.2.8.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/我的当前开发库/spring-aspects-3.2.8.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/我的当前开发库/spring-beans-3.2.8.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/我的当前开发库/spring-context-3.2.8.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/我的当前开发库/spring-core-3.2.8.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/我的当前开发库/spring-expression-3.2.8.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/我的当前开发库/spring-jdbc-3.2.8.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/我的当前开发库/spring-tx-3.2.8.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/我的当前开发库/spring-web-3.2.8.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/我的当前开发库/spring-webmvc-3.2.8.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/我的当前开发库/standard.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/我的当前开发库/javax.servlet.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/我的当前开发库/javax.servlet.jsp.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/我的当前开发库/c3p0-0.9.5-pre8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/我的当前开发库/mchange-commons-java-0.2.7.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

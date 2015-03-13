@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.apache.org//dtd mapper 3.0//en"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--每个实例和实体的访问接口对应一个映射（mapper）文件-->
+<!--namespace的值是实体访问接口的类名，不能错-->
+<mapper namespace="version01.dao.CostDao">
+
+
+    <select id="findAll" resultType="version01.entity.Cost">
+        select * from Cost
+    </select>
+    <!--         jdbcType不写也可以，#{}的含义是从name属性取值，如果不写jdbcType，mybatis会按照它理解的类型来获取，-->
+    <!--         大部分mybatis能正确识别，为了避免识别错误，就可以明确告诉它-->
+    <!--         VARCHAR的含义是，一种映射关系，表示java的String对应数据库的varchar-->
+    <!--         注意要区分大小写-->
+    <!-- 简单来说，所有字符串用VARCHAR，数字用NUMERIC，日期看情况有TIMESTAMP、DATE、TIME-->
+    <insert id="save" parameterType="version01.entity.Cost">
+        insert into cost(
+          name,
+          base_duration,
+          base_cost,
+          unit_cost,
+          status,
+          descr,
+          createtime,
+          startime,
+          cost_type
+        ) values(
+          #{name,jdbcType=VARCHAR},
+          #{base_duration,jdbcType=NUMERIC},
+          #{base_cost,jdbcType=NUMERIC},
+          #{unit_cost,jdbcType=NUMERIC},
+          #{status,jdbcType=VARCHAR},
+          #{descr,jdbcType=VARCHAR},
+          #{createtime,jdbcType=TIMESTAMP},
+          #{startime,jdbcType=TIMESTAMP},
+          #{cost_type,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <!--根据id查询一条资费数据-->
+    <select id="findById" parameterType="java.lang.Integer" resultType="version01.entity.Cost">
+        select * from cost where cost_id=#{id}
+    </select>
+    <!--//#{id}就是dao中方法的参数-->
+
+    <!--修改一条资费数据-->
+    <!--发现，如果参数是对象，就通过get方法取得属性，如果参数直接就是属性，就直接取值-->
+    <!--和新增一样，指定好jdbcType-->
+    <update id="update" parameterType="version01.entity.Cost">
+        update cost set
+          name=#{name,jdbcType=VARCHAR},
+          base_duration=#{base_duration,jdbcType=NUMERIC},
+          base_cost=#{base_cost,jdbcType=NUMERIC},
+          unit_cost=#{unit_cost,jdbcType=NUMERIC},
+          descr=#{descr,jdbcType=VARCHAR},
+          cost_type=#{cost_type,jdbcType=VARCHAR}
+        where cost_id=#{cost_id,jdbcType=NUMERIC}
+    </update>
+
+    <!--删除一条资费数据-->
+    <delete id="delete" parameterType="java.lang.Integer">
+        delete from cost where cost_id=#{id}
+    </delete>
+
+    <!--分页查询-->
+    <!--注意：在xml中不能直接写小于号，要用&lt;转义，或者把sql语句写在<![CDATA[的这里]]>    -->
+    <select id="findByPage" parameterType="version01.vo.CostPage" resultType="version01.entity.Cost">
+        SELECT * FROM cost WHERE cost_id >#{begin} ORDER BY cost_id asc LIMIT 0,#{pageSize}
+    </select>
+
+    <!--查询总行数-->
+    <select id="findRows" resultType="java.lang.Integer">
+        select count(*) from cost
+    </select>
+
+</mapper>

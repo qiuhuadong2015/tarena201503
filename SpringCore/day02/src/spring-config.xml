@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+       <bean id="dataSource" class="day02_Annotation.entity.JdbcDataSource">
+              <property name="driver" value="com.mysql.jdbc.Driver"/>
+              <property name="url" value="jdbc:mysql://localhost:3306/javaweb"/>
+              <property name="user" value="root"/>
+              <property name="pwd" value="qhd920625"/>
+       </bean>
+
+       <bean id="userDAO" class="day02_Annotation.entity.MySQLUserDAO">
+              <property name="jdbcDataSource" ref="dataSource"/>
+       </bean>
+
+       <bean id="userService" class="day02_Annotation.entity.UserService" autowire="byType">
+
+       </bean>
+
+
+       <!--各种类型数据的注入测试-->
+       <bean id="exampleBean" class="day02_Annotation.entity.ExampleBean">
+              <property name="age" value="18"/>
+              <property name="started" value="true"/>
+              <property name="price" value="8.88"/>
+              <property name="date">
+                     <bean class="java.util.Date"/>
+              </property>
+              <property name="users">
+                     <list>
+                            <value>user1</value>
+                            <value>user2</value>
+                     </list>
+              </property>
+              <property name="cards">
+                     <set>
+                            <value>card1</value>
+                            <value>card2</value>
+                     </set>
+              </property>
+              <property name="config">
+                     <props>
+                            <prop key="key1">value1</prop>
+                            <prop key="key2">value2</prop>
+                     </props>
+              </property>
+              <property name="map">
+                     <map>
+                            <entry key="key1" value="value1"></entry>
+                            <entry key="key2" value="value2"></entry>
+                     </map>
+              </property>
+       </bean>
+
+       <!--表达式注入-->
+       <util:properties id="jdbcProperties" location="classpath:jdbc.properties"/>
+       <bean id="ds" class="day02_Annotation.entity.JdbcDataSource">
+              <property name="driver" value="#{jdbcProperties['jdbc.driver']}"/>
+              <property name="user" value="#{jdbcProperties.user}"/>
+              <property name="pwd" value="#{jdbcProperties.password}"/>
+              <property name="url" value="#{jdbcProperties.url}"/>
+       </bean>
+
+       <!--测试null-->
+       <bean id="demoBean" class="day02_Annotation.entity.DemoBean">
+              <property name="phone" value=""/>
+              <property name="address" value=""/>
+       </bean>
+</beans>

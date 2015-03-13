@@ -1,0 +1,29 @@
+<component name="libraryTable">
+  <library name="spring-mybatis-jar">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/spring-mybitis-jar/aopalliance.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/spring-mybitis-jar/aspectjweaver.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/spring-mybitis-jar/commons-collections-3.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/spring-mybitis-jar/commons-dbcp-1.2.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/spring-mybitis-jar/commons-logging.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/spring-mybitis-jar/commons-pool.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/spring-mybitis-jar/jstl.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/spring-mybitis-jar/mybatis-3.2.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/spring-mybitis-jar/mybatis-spring-1.2.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/spring-mybitis-jar/ojdbc6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/spring-mybitis-jar/spring-aop-3.2.8.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/spring-mybitis-jar/spring-aspects-3.2.8.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/spring-mybitis-jar/spring-beans-3.2.8.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/spring-mybitis-jar/spring-context-3.2.8.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/spring-mybitis-jar/spring-core-3.2.8.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/spring-mybitis-jar/spring-expression-3.2.8.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/spring-mybitis-jar/spring-jdbc-3.2.8.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/spring-mybitis-jar/spring-tx-3.2.8.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/spring-mybitis-jar/spring-web-3.2.8.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/spring-mybitis-jar/spring-webmvc-3.2.8.RELEASE.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../javaLibs/spring-mybitis-jar/standard.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

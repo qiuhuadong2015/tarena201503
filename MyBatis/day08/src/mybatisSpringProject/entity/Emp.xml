@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.apache.org//dtd mapper 3.0//en"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatisSpringProject.entity.EmpMapper">
+    <insert id="addEmp" keyProperty="empno"
+            parameterType="mybatisSpringProject.entity.Emp">
+        <selectKey keyProperty="empno"
+                   resultType="int" order="BEFORE">
+            select seq_t_emp.nextval from dual
+        </selectKey>
+        insert into t_emp (empno, ename, mgr,
+        hiredate, sal, comm, deptno)
+        values (#{empno},#{ename}, #{mgr},
+        #{hiredate}, #{sal}, #{comm}, #{deptno})
+    </insert>
+    <delete id="deleteEmp"
+            parameterType="mybatisSpringProject.entity.Emp">
+        delete from t_dept where empno=#{empno}
+    </delete>
+    <select id="findEmpById"
+            resultType="mybatisSpringProject.entity.Emp"
+            parameterType="java.lang.Integer">
+        select empno, ename, mgr,
+        hiredate, sal, comm, deptno
+        from t_emp where emono = #{empno}
+    </select>
+    <select id="findAllEmp"
+            resultType="mybatisSpringProject.entity.Emp">
+        select empno, ename, mgr,
+        hiredate, sal, comm, deptno
+        from t_emp
+    </select>
+    <select id="findEmpByName"
+            resultType="mybatisSpringProject.entity.Emp"
+            parameterType="java.lang.String">
+        select empno, ename, mgr,
+        hiredate, sal, comm, deptno
+        from t_emp where ename like #{ename}
+    </select>
+    <update id="updateEmp"
+            parameterType="mybatisSpringProject.entity.Emp">
+        update t_emp set ename=#{ename},
+        mgr=#{mgr}, hiredate=#{hiredate},
+        sal=#{sal}, comm=#{comm},
+        deptno=#{deptno} where empno=#{empno}
+    </update>
+</mapper>
+

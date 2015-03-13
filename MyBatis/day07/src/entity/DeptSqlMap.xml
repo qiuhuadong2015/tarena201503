@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.apache.org//dtd mapper 3.0//en"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--每个实例和实体的访问接口对应一个映射（mapper）文件-->
+<!--namespace的值是实体访问接口的类名，不能错-->
+<mapper namespace="entity.DeptMapper">
+    <!--添加每个Mapper方法的SQL语句-->
+    <!--id=add对应的是DeptMapper接口中的方法名add-->
+    <!--paramaterType=xxx对应的是add方法的参数类型xxx-->
+    <!--sql语句中的#{deptNo}对应的是参数Department类型实例的Bean属性（也就是getDeptNo()的值）-->
+    <!--useGeneratedKeys是这对mysql（或其它可以列自增的数据库），可以识别mysql的自增列-->
+    <insert id="add" parameterType="entity.Department" keyProperty="deptNo" useGeneratedKeys="true">
+--         在执行插入语句insert之前（before）执行selectKey的语句，把返回的int类型数据作为deptNo属性的值
+--         当数据库为oracle的时候，需要用到id序列
+        <!--<selectKey keyProperty="deptNo" resultType="int" order="BEFORE">-->
+--             select seq_department.nextval from dual
+        <!--</selectKey>-->
+        insert into department(deptName,location) value(#{deptName},#{location})
+    </insert>
+
+    <delete id="detele" parameterType="entity.Department">
+        delete from department where deptNo=#{deptNo}
+    </delete>
+
+    <select id="findById" parameterType="java.lang.Integer" resultType="entity.Department">
+        select deptNo,deptName,location from department where deptNo=#{deptNo}
+    </select>
+
+    <update id="update" parameterType="entity.Department">
+        update department set deptName=#{deptName},location=#{location} where deptNo=#{deptNo}
+    </update>
+
+    <!--虽然返回的是List<Department>类型，但是这里只要写泛型的类型即可-->
+    <select id="findAll" resultType="entity.Department">
+        select * from department
+    </select>
+</mapper>

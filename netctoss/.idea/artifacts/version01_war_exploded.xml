@@ -1,0 +1,23 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="version01:war exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/version01_war_exploded</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="version01/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="version01" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="application" name="spring(IOC+AOP+JDBC)-4.1.1" />
+          <element id="library" level="application" name="spring-web-4.1.5.RELEASE" />
+          <element id="library" level="application" name="c3p0-0.9.5-pre8" />
+          <element id="library" level="application" name="jstl-1.1" />
+          <element id="library" level="application" name="mybatis-3.2.5" />
+          <element id="library" level="application" name="mybatis-spring-1.2.2" />
+          <element id="library" level="application" name="mysql-connector-java-5.1.34-bin" />
+          <element id="library" level="module" name="JUnit4" module-name="version01" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>

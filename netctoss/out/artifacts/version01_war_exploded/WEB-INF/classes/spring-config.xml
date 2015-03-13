@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+       <!--因为使用了外部的API，所以必须要用xml的bean配置来注入对象-->
+       <!--使用c3p0（DataSource）要配置的，注入数据源对象-->
+       <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+              <!--SpringIOC的property配置原理是，调用bean的setXXX（name的值）方法-->
+              <!--依赖数据库的4个参数，id=jdbcProperties以及key、dirver、url、username、password-->
+              <property name="driverClass" value="#{jdbcProperties.driver}" />
+              <property name="jdbcUrl" value="#{jdbcProperties.url}" />
+              <property name="user" value="#{jdbcProperties.username}" />
+              <property name="password" value="#{jdbcProperties.password}" />
+              <!--数据源自身管理连接需要的3个参数，和dbcp的属性名不一样-->
+              <property name="initialPoolSize" value="#{jdbcProperties.init}" />
+              <property name="minPoolSize" value="#{jdbcProperties.min}" />
+              <property name="maxPoolSize" value="#{jdbcProperties.max}" />
+       </bean>
+       <!--其中jdbc.properties位于src下-->
+       <util:properties id="jdbcProperties" location="classpath:jdbc.properties" />
+
+       <!--使用MyBatis in Spring要配置的，其实也是MyBatis的配置-->
+       <bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
+              <!--MyBatis依赖于dataSource，bean的id=dataSource-->
+              <property name="dataSource" ref="dataSource"/>
+              <!--MyBatis需要配置有哪些Mapper-->
+              <!--注意：一定要有classpath:前缀-->
+              <property name="mapperLocations" value="classpath:version01/entity/*.xml"/>
+       </bean>
+
+       <!--下面这个bean，是mybatis的普通配置方式，如果使用注解配置，就不需要这个bean配置-->
+       <!--有一个Dept表，就有有一个Dept实体类，就有一个DeptMapper接口，就有一个Dept.xml文件，就有一个bean配置-->
+       <!--这是为了让Spring能够创建DeptMapper接口的实例对象-->
+       <!--虽然配置的class类型为MapperFactoryBean，但是这里Spring对MyBatis的这个类的处理比较特殊-->
+       <!--实际执行期间，创建的对象类型是Spring调用getBean("deptMapper")返回的对象类型-->
+       <!--<bean id="deptMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">-->
+              <!--&lt;!&ndash;依赖于sqlSessionFactoryBean，bean的id=sqlSessionFactoryBean&ndash;&gt;-->
+              <!--<property name="sqlSessionFactory" ref="sqlSessionFactoryBean"/>-->
+              <!--&lt;!&ndash;依赖于DeptMapper接口，这才是我们用getBean（）方法时，接收的类型&ndash;&gt;-->
+              <!--<property name="mapperInterface" value="mybatisSpringProject.dao.DeptMapper"/>-->
+       <!--</bean>-->
+
+       <!--使用mybatis的注解方式配置mapper要配置的-->
+       <bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+              <!--扫描entity这个包下的所有/满足条件的接口，自动创建Mapper的Bean对象，Bean的ID采用默认规则-->
+              <!--注意,把mapper/dao放在一个包里去扫描，避免扫描到其他非mapper导致出错-->
+              <property name="basePackage" value="version01.dao"/>
+              <!--若有扫描条件,在定义了自定义注解Mapper类后，对Mapper加上@Mapper注解就会自动被扫描-->
+              <!--注意这里要自己定义注解类-->
+              <property name="annotationClass" value="version01.annotation.MyMybatisMapper"/>
+       </bean>
+
+       <!--不满足于mybatis的mapper，要封装成dao而要配置的-->
+       <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+              <!--API规定的，必须依赖-->
+              <constructor-arg index="0" ref="sqlSessionFactoryBean"/>
+       </bean>
+
+
+
+
+
+       <!--使用SpringIOC的注解注入功能要配置的-->
+       <!--开启注解扫描-->
+       <!--<context:component-scan base-package="要扫描的包，该包中被注解的类会被注册为bean"/>-->
+       <!--要注意，只要在包内的类，都会被扫描尝试注册，一旦不能注册（例如没有被注解）就会出错-->
+       <!--注意：一般我们要扫描的有entity包-->
+       <context:component-scan base-package="version01"/>
+
+       <!--使用SpringMVC要配置的-->
+       <bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping" />
+
+       <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+              <property name="prefix" value="/WEB-INF/jsp/"/>
+              <property name="suffix" value=".jsp"/>
+       </bean>
+
+       <!--支持@RequestMapping请求和Controller映射-->
+       <mvc:annotation-driven/>
+
+       <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
+       <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter"/>
+
+
+
+</beans>
