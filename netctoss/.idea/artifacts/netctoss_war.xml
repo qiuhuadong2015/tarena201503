@@ -12,6 +12,7 @@
           <element id="library" level="application" name="mysql-connector-java-5.1.34-bin" />
           <element id="library" level="application" name="spring(IOC+AOP+JDBC)-4.1.1" />
           <element id="library" level="application" name="spring-web-4.1.5.RELEASE" />
+          <element id="library" level="application" name="springJSON-2.4.1" />
         </element>
       </element>
     </root>

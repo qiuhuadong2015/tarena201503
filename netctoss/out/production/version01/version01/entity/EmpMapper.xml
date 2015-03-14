@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.apache.org//dtd mapper 3.0//en"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+        <!--Unit02的知识点-->
+
+<!--每个实例和实体的访问接口对应一个映射（mapper）文件-->
+<!--namespace的值是实体访问接口的类名，不能错-->
+<mapper namespace="version01.dao.EmpDao">
+
+    <!--根据部门查询员工，若部门条件不为空，则将部门条件拼入SQL，否则不拼入-->
+    <select id="findByDept" parameterType="version01.entity.Condition" resultType="version01.entity.Emp">
+        select * from t_emp
+        <if test="deptno!=null">where deptno=#{deptno}</if>
+    </select>
+
+    <!--查询高于当前工资的员工-->
+    <!--SQL的业务逻辑，这里举例例如：-->
+    <!--如果传入的工资大于3000，则查询工资高于传入工资的员工-->
+    <!--如果传入的工资小于等于3000，则查询工资高于3000的员工-->
+    <select id="findBySalary" parameterType="version01.entity.Condition" resultType="version01.entity.Emp">
+        select * from t_emp
+        <choose>
+            <when test="salary>3000">
+                where sal>#{salary}
+            </when>
+            <otherwise>
+                where sal>=3000
+            </otherwise>
+        </choose>
+    </select>
+
+    <!--根据多个条件查询员工，拼入多个查询条件-->
+    <!--哪个条件不为空，就拼入SQL-->
+    <!--<select id="findByCondiction" parameterType="version01.entity.Condition" resultType="version01.entity.Emp">-->
+        <!--select * from t_emp where 1=1-->
+        <!--<if test="deptno!=null">-->
+            <!--and deptno=#{deptno}-->
+        <!--</if>-->
+        <!--<if test="salary!=null">-->
+            <!--and sal>#{salary}-->
+        <!--</if>-->
+    <!--</select>-->
+    <!--以上的这种技术处理多个where条件的拼接，在mybatis有相同作用的支持方式-->
+    <select id="findByCondition" parameterType="version01.entity.Condition" resultType="version01.entity.Emp">
+        select * from t_emp
+        <where>
+            <if test="deptno!=null">
+                and deptno=#{deptno}
+            </if>
+            <if test="salary!=null">
+                and sal>#{salary}
+            </if>
+        </where>
+    </select>
+
+    <!--修改员工-->
+    <!--传入的对象中，哪个属性不为空，则将其拼入update语句，否则不拼入-->
+    <!--和where语句一样，只能有一个set，因此用if的时候，不能带set，也要用set表示范围，属性之间有逗号，所以加上-->
+    <update id="update" parameterType="version01.entity.Emp">
+        update t_emp
+        <set>
+            <if test="ename!=null">
+                ename=#{ename,jdbcType=VARCHAR},
+            </if>
+            <if test="job!=null">
+                job=#{job,jdbcType=VARCHAR},
+            </if>
+            <if test="mgr!=null">
+                mgr=#{mgr,jdbcType=NUMERIC},
+            </if>
+            <if test="sal!=null">
+                sal=#{sal,jdbcType=NUMERIC},
+            </if>
+        </set>
+        where empno=#{empno}
+    </update>
+
+    <select id="findByCondition2" parameterType="version01.entity.Condition" resultType="version01.entity.Emp">
+        select * from t_emp
+        <trim prefix="where" prefixOverrides="and">
+            <if test="deptno!=null">
+                and deptno=#{deptno}
+            </if>
+            <if test="salary!=null">
+                and sal>#{salary}
+            </if>
+        </trim>
+    </select>
+
+    <update id="update2" parameterType="version01.entity.Emp">
+        update t_emp
+        <trim prefix="set" suffixOverrides=",">
+            <if test="ename!=null">
+                ename=#{ename,jdbcType=VARCHAR},
+            </if>
+            <if test="job!=null">
+                job=#{job,jdbcType=VARCHAR},
+            </if>
+            <if test="mgr!=null">
+                mgr=#{mgr,jdbcType=NUMERIC},
+            </if>
+            <if test="sal!=null">
+                sal=#{sal,jdbcType=NUMERIC},
+            </if>
+        </trim>
+        where empno=#{empno}
+    </update>
+
+    <!--根据一组员工ID，查询出其对应的员工数据-->
+    <select id="findByIds" parameterType="version01.entity.Condition" resultType="version01.entity.Emp">
+        select * from t_emp where empno in
+        <foreach collection="empnos" item="empno" open="(" close=")" separator=",">
+            #{empno}
+        </foreach>
+    </select>
+</mapper>

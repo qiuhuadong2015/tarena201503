@@ -108,8 +108,8 @@
             <%--<td>${cost.startime}</td>--%>
             <td>
               <c:choose>
-                <c:when test="cost.status==0">开通</c:when>
-                <c:otherwise>暂停</c:otherwise>
+                <c:when test="${cost.status==0}">暂停</c:when>
+                <c:otherwise>开通</c:otherwise>
               </c:choose>
             </td>
             <td>

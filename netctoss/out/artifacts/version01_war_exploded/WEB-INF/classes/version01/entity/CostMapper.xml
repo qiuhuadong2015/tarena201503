@@ -2,11 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.apache.org//dtd mapper 3.0//en"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+        <!--Unit01完成-->
+
 <!--每个实例和实体的访问接口对应一个映射（mapper）文件-->
 <!--namespace的值是实体访问接口的类名，不能错-->
 <mapper namespace="version01.dao.CostDao">
 
-
+    <!--查询全部的资费数据-->
     <select id="findAll" resultType="version01.entity.Cost">
         select * from Cost
     </select>

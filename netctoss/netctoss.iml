@@ -40,5 +40,6 @@
     <orderEntry type="library" name="spring(IOC+AOP+JDBC)-4.1.1" level="application" />
     <orderEntry type="library" name="spring-web-4.1.5.RELEASE" level="application" />
     <orderEntry type="library" name="javax.servlet" level="application" />
+    <orderEntry type="library" name="springJSON-2.4.1" level="application" />
   </component>
 </module>

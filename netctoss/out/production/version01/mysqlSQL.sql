@@ -1,8 +1,8 @@
---grant debug connect session,debug any procedure to jsd1302;
+# grant debug connect session,debug any procedure to jsd1302;
 
------------------------ 表相关的所有语句DDL，DML，TCL
---资费信息表
---drop table COST;
+# --------------------- 表相关的所有语句DDL，DML，TCL
+# --资费信息表
+# --drop table COST;
 create table cost(
   	cost_id			int(4)  primary key,
   	name 			char(50)  not null,
@@ -25,21 +25,21 @@ INSERT INTO COST VALUES (5,'计时收费',null,null,0.5,0,'0.5元/时,不使用�
 INSERT INTO COST VALUES (6,'包月',null,20,null,0,'每月20元,不限制使用时间',DEFAULT,DEFAULT,NULL);
 
 
-COMMIT;
+# COMMIT;
+#
+# COLUMN NAME FORMAT a10
+# COLUMN BASE_COST FORMAT 99.99
+# COLUMN BASE_DURATION FORMAT 999
+# COLUMN UNIT_COST FORMAT 99.99
+# COLUMN ID FORMAT 9
+# select id,name,base_cost,base_duration,unit_cost from cost
 
-COLUMN NAME FORMAT a10
-COLUMN BASE_COST FORMAT 99.99
-COLUMN BASE_DURATION FORMAT 999
-COLUMN UNIT_COST FORMAT 99.99
-COLUMN ID FORMAT 9
-select id,name,base_cost,base_duration,unit_cost from cost
-
---UNIX服务器信息表
-drop table host
+# --UNIX服务器信息表
+# drop table host
 create table host(
-host_id 	varchar2(15) constraint host_id_pk primary key,
-name 		varchar2(50),
-location	varchar2(100)
+host_id 	varchar(15) constraint host_id_pk primary key,
+name 		varchar(50),
+location	varchar(100)
 );
 
 
@@ -50,90 +50,90 @@ INSERT INTO HOST VALUES ('192.168.0.200','ultra10','beijing');
 COMMIT;
 
 
---帐务信息表
-drop table account
+# --帐务信息表
+# drop table account
 create table account(
- 	account_id		number(9) constraint account_id_pk primary key,
- 	recommender_id	number(9) constraint account_recommender_id_fk
-							references account(account_id),
- 	login_name		varchar2(30)  not null
-							constraint account_login_name_uk unique,
- 	login_passwd	varchar2(30) not null,
- 	status			char(1)	constraint account_status_ck
- 						check (status in (0,1,2)),
- 	create_date		date	 default sysdate,
- 	pause_date		date,
- 	close_date		date,
- 	real_name		varchar2(20)	not null,
- 	idcard_no		char(18)		not null
-							constraint account_incard_no unique,
- 	birthdate		date,
- 	gender	        	char(1) constraint account_gender_ck
-							check (gender in (0,1)),
- 	occupation		varchar2(50),
- 	telephone		varchar2(15) not null,
- 	email			varchar2(50),
- 	mailaddress		varchar2(200),
- 	zipcode			char(6),
- 	qq				varchar2(15),
- 	last_login_time	  	date,
- 	last_login_ip		varchar2(15)
+	account_id		int(9) primary key,
+	recommender_id	int(9),
+# 		constraint account_recommender_id_fk
+# 		references account(account_id),
+	login_name		varchar(30)  not null unique,
+	login_passwd	varchar(30) not null,
+	status			char(1)
+	check (status in (0,1,2)),
+	create_date		timestamp	 default now(),
+	pause_date		timestamp,
+	close_date		timestamp,
+	real_name		varchar(20)	not null,
+	idcard_no		char(18)		not null unique,
+	birthdate		date,
+	gender    	char(1)
+	check (gender in (0,1)),
+	occupation		varchar(50),
+	telephone		varchar(15) not null,
+	email			varchar(50),
+	mailaddress		varchar(200),
+	zipcode			char(6),
+	qq				varchar(15),
+	last_login_time	  	timestamp,
+	last_login_ip		varchar(15),
+	foreign key(recommender_id) references account(account_id) on delete cascade on update cascade
 );
 
 
-ALTER SESSION SET NLS_DATE_FORMAT = 'yyyy mm dd hh24:mi:ss';
-INSERT INTO ACCOUNT(ID,RECOMMENDER_ID,LOGIN_NAME,LOGIN_PASSWD,STATUS,CREATE_DATE,
-     REAL_NAME,BIRTHDATE,IDCARD_NO,TELEPHONE)
-VALUES(1005,NULL,'taiji001','256528',1,'2008 03 15','zhangsanfeng','19430225','410381194302256528',13669351234);
+# ALTER SESSION SET NLS_DATE_FORMAT = 'yyyy mm dd hh24:mi:ss';
+INSERT INTO ACCOUNT(account_ID,RECOMMENDER_ID,LOGIN_NAME,LOGIN_PASSWD,STATUS,CREATE_DATE,
+										REAL_NAME,BIRTHDATE,IDCARD_NO,TELEPHONE)
+VALUES(1005,NULL,'taiji001','256528',1,'2008-03-15 00:00:00','zhangsanfeng','19430225','410381194302256528',13669351234);
 
-INSERT INTO ACCOUNT(ID,RECOMMENDER_ID,LOGIN_NAME,LOGIN_PASSWD,STATUS,CREATE_DATE,
-REAL_NAME,BIRTHDATE,IDCARD_NO,TELEPHONE)
-VALUES(1010,NULL,'xl18z60','190613',1,'2009 01 10','guojing','19690319','330682196903190613',13338924567);
+INSERT INTO ACCOUNT(account_ID,RECOMMENDER_ID,LOGIN_NAME,LOGIN_PASSWD,STATUS,CREATE_DATE,
+										REAL_NAME,BIRTHDATE,IDCARD_NO,TELEPHONE)
+VALUES(1010,NULL,'xl18z60','190613',1,'2009-01-10 00:00:00','guojing','19690319','330682196903190613',13338924567);
 
-INSERT INTO ACCOUNT(ID,RECOMMENDER_ID,LOGIN_NAME,LOGIN_PASSWD,STATUS,CREATE_DATE,
-REAL_NAME,BIRTHDATE,IDCARD_NO,TELEPHONE)
-VALUES(1011,1010,'dgbf70','270429',1,'2009 03 01','huangrong','19710827','330902197108270429',13637811357);
+INSERT INTO ACCOUNT(account_ID,RECOMMENDER_ID,LOGIN_NAME,LOGIN_PASSWD,STATUS,CREATE_DATE,
+										REAL_NAME,BIRTHDATE,IDCARD_NO,TELEPHONE)
+VALUES(1011,1010,'dgbf70','270429',1,'2009-03-01 00:00:00','huangrong','19710827','330902197108270429',13637811357);
 
-INSERT INTO ACCOUNT(ID,RECOMMENDER_ID,LOGIN_NAME,LOGIN_PASSWD,STATUS,CREATE_DATE,
-REAL_NAME,BIRTHDATE,IDCARD_NO,TELEPHONE)
-VALUES(1015,1005,'mjjzh64','041115',1,'2010 03 12','zhangwuji','19890604','610121198906041115',13572952468);
+INSERT INTO ACCOUNT(account_ID,RECOMMENDER_ID,LOGIN_NAME,LOGIN_PASSWD,STATUS,CREATE_DATE,
+										REAL_NAME,BIRTHDATE,IDCARD_NO,TELEPHONE)
+VALUES(1015,1005,'mjjzh64','041115',1,'2010-03-12 00:00:00','zhangwuji','19890604','610121198906041115',13572952468);
 
-INSERT INTO ACCOUNT(ID,RECOMMENDER_ID,LOGIN_NAME,LOGIN_PASSWD,STATUS,CREATE_DATE,
-REAL_NAME,BIRTHDATE,IDCARD_NO,TELEPHONE)
-VALUES(1018,1011,'jmdxj00','010322',1,'2011 01 01','guofurong','199601010322','350581200201010322',18617832562);
+INSERT INTO ACCOUNT(account_ID,RECOMMENDER_ID,LOGIN_NAME,LOGIN_PASSWD,STATUS,CREATE_DATE,
+										REAL_NAME,BIRTHDATE,IDCARD_NO,TELEPHONE)
+VALUES(1018,1011,'jmdxj00','010322',1,'2011-01-01 00:00:00','guofurong','20020101','350581200201010322',18617832562);
 
-INSERT INTO ACCOUNT(ID,RECOMMENDER_ID,LOGIN_NAME,LOGIN_PASSWD,STATUS,CREATE_DATE,
-REAL_NAME,BIRTHDATE,IDCARD_NO,TELEPHONE)
-VALUES(1019,1011,'ljxj90','310346',1,'2012 02 01','luwushuang','19930731','320211199307310346',13186454984);
+INSERT INTO ACCOUNT(account_ID,RECOMMENDER_ID,LOGIN_NAME,LOGIN_PASSWD,STATUS,CREATE_DATE,
+										REAL_NAME,BIRTHDATE,IDCARD_NO,TELEPHONE)
+VALUES(1019,1011,'ljxj90','310346',1,'2012-02-01 00:00:00','luwushuang','19930731','320211199307310346',13186454984);
 
-INSERT INTO ACCOUNT(ID,RECOMMENDER_ID,LOGIN_NAME,LOGIN_PASSWD,STATUS,CREATE_DATE,
-REAL_NAME,BIRTHDATE,IDCARD_NO,TELEPHONE)
-VALUES(1020,NULL,'kxhxd20','012115',1,'2012 02 20','weixiaobao','20001001','321022200010012115',13953410078);
+INSERT INTO ACCOUNT(account_ID,RECOMMENDER_ID,LOGIN_NAME,LOGIN_PASSWD,STATUS,CREATE_DATE,
+										REAL_NAME,BIRTHDATE,IDCARD_NO,TELEPHONE)
+VALUES(1020,NULL,'kxhxd20','012115',1,'2012-02-20 00:00:00','weixiaobao','20001001','321022200010012115',13953410078);
 
-INSERT INTO ACCOUNT(ID,RECOMMENDER_ID,LOGIN_NAME,LOGIN_PASSWD,STATUS,CREATE_DATE,
-REAL_NAME,BIRTHDATE,IDCARD_NO,TELEPHONE)
-VALUES(1021,NULL,'kxhxd21','012116',1,'2012 02 20','zhangsan','20001002','321022200010012116',13953410079);
-INSERT INTO ACCOUNT(ID,RECOMMENDER_ID,LOGIN_NAME,LOGIN_PASSWD,STATUS,CREATE_DATE,
-REAL_NAME,BIRTHDATE,IDCARD_NO,TELEPHONE)
-VALUES(1022,NULL,'kxhxd22','012117',1,'2012 02 20','lisi','20001003','321022200010012117',13953410080);
-INSERT INTO ACCOUNT(ID,RECOMMENDER_ID,LOGIN_NAME,LOGIN_PASSWD,STATUS,CREATE_DATE,
-REAL_NAME,BIRTHDATE,IDCARD_NO,TELEPHONE)
-VALUES(1023,NULL,'kxhxd23','012118',1,'2012 02 20','wangwu','20001004','321022200010012118',13953410081);
-INSERT INTO ACCOUNT(ID,RECOMMENDER_ID,LOGIN_NAME,LOGIN_PASSWD,STATUS,CREATE_DATE,
-REAL_NAME,BIRTHDATE,IDCARD_NO,TELEPHONE)
-VALUES(1024,NULL,'kxhxd24','012119',1,'2012 02 20','zhouliu','20001005','321022200010012119',13953410082);
-INSERT INTO ACCOUNT(ID,RECOMMENDER_ID,LOGIN_NAME,LOGIN_PASSWD,STATUS,CREATE_DATE,
-REAL_NAME,BIRTHDATE,IDCARD_NO,TELEPHONE)
-VALUES(1025,NULL,'kxhxd25','012120',1,'2012 02 20','maqi','20001006','321022200010012120',13953410083);
-COMMIT;
+INSERT INTO ACCOUNT(account_ID,RECOMMENDER_ID,LOGIN_NAME,LOGIN_PASSWD,STATUS,CREATE_DATE,
+										REAL_NAME,BIRTHDATE,IDCARD_NO,TELEPHONE)
+VALUES(1021,NULL,'kxhxd21','012116',1,'2012-02-20 00:00:00','zhangsan','20001002','321022200010012116',13953410079);
+INSERT INTO ACCOUNT(account_ID,RECOMMENDER_ID,LOGIN_NAME,LOGIN_PASSWD,STATUS,CREATE_DATE,
+										REAL_NAME,BIRTHDATE,IDCARD_NO,TELEPHONE)
+VALUES(1022,NULL,'kxhxd22','012117',1,'2012-02-20 00:00:00','lisi','20001003','321022200010012117',13953410080);
+INSERT INTO ACCOUNT(account_ID,RECOMMENDER_ID,LOGIN_NAME,LOGIN_PASSWD,STATUS,CREATE_DATE,
+										REAL_NAME,BIRTHDATE,IDCARD_NO,TELEPHONE)
+VALUES(1023,NULL,'kxhxd23','012118',1,'2012-02-20 00:00:00','wangwu','20001004','321022200010012118',13953410081);
+INSERT INTO ACCOUNT(account_ID,RECOMMENDER_ID,LOGIN_NAME,LOGIN_PASSWD,STATUS,CREATE_DATE,
+										REAL_NAME,BIRTHDATE,IDCARD_NO,TELEPHONE)
+VALUES(1024,NULL,'kxhxd24','012119',1,'2012-02-20 00:00:00','zhouliu','20001005','321022200010012119',13953410082);
+INSERT INTO ACCOUNT(account_ID,RECOMMENDER_ID,LOGIN_NAME,LOGIN_PASSWD,STATUS,CREATE_DATE,
+										REAL_NAME,BIRTHDATE,IDCARD_NO,TELEPHONE)
+VALUES(1025,NULL,'kxhxd25','012120',1,'2012-02-20 00:00:00','maqi','20001006','321022200010012120',13953410083);
+# COMMIT;
 
-select id,recommender_id,login_name,login_passwd,status,create_date,real_name,idcard_no,telephone
-from account;
-column id format 9999
-column recommender_id format 9999
-column login_name format a10
-column login_passwd format a10
-column real_name format a10
+# select id,recommender_id,login_name,login_passwd,status,create_date,real_name,idcard_no,telephone
+# from account;
+# column id format 9999
+# column recommender_id format 9999
+# column login_name format a10
+# column login_passwd format a10
+# column real_name format a10
 
 --业务信息表
 drop table SERVICE
