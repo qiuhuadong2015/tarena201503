@@ -114,4 +114,58 @@
             #{empno}
         </foreach>
     </select>
+
+    <!--Unit04增加的内容-->
+
+    <!--第一种关联查询方法-->
+    <!--根据ID查询员工，同时自动查出部门，多对一嵌套查询映射。-->
+    <select id="findById_WithDept_BySubSelect" parameterType="java.lang.Integer" resultMap="empMap">
+        select * from t_emp where empno=#{id}
+    </select>
+    <!--为了实现多对一映射，还需要一个查询部门的SQL-->
+    <!--以往用resultType封装，也就是直接写Emp类型；现在用resultMap封装，要在resultMap节点写Emp类型并声明关联信息-->
+    <select id="findDept" parameterType="java.lang.Integer" resultType="version01.entity.Dept">
+        select * from t_dept where deptno=#{deptno}
+    </select>
+    <!--最后要把这两个SQL装配成一个对象，用resultMap实现-->
+    <!--用于将查询到的结果集映射成实体对象，以前写的是resultMap和result子节点，现在多了association-->
+    <resultMap id="empMap" type="version01.entity.Emp">
+        <!--association声明这是一个关联属性——0、发现有这个节点，就会进行一次关联查询-->
+        <!--
+            property指定 关联属性名——4、封装后赋予给属性
+            column指定了 关联字段名——1、将会根据这个字段，进行关联查询
+            javaType指定了 查询到的关联属性用哪种类型封装——3、查询后封装
+            select指定 查询关联数据的SQL（标签的id）——2、关联查询
+        -->
+        <association property="dept" column="deptno" javaType="version01.entity.Dept" select="findDept"/>
+    </resultMap>
+
+    <!--第二种关联查询方法-->
+    <!--区别在于不需要第二次查询-->
+    <select id="findById_WithDept_ByJoin" parameterType="java.lang.Integer" resultMap="empMapByJoin">
+        select e.*,d.* from t_emp e inner join t_dept d
+        on e.deptno=d.deptno
+        where e.empno=#{id}
+    </select>
+    <!--为什么用resultMap？如果不用，属性名就和字段名同名，如果希望不同名，就可以用resultMap自定义映射-->
+    <!--此外，resultMap的第二个功能就是映射关联查询的属性-->
+    <!--将查询到的结果集映射成实体对象-->
+    <resultMap id="empMapByJoin" type="version01.entity.Emp">
+        <!--低版本无效：由于员工表中的字段和员工实体类的属性名一致，可以省略这些result配置-->
+        <id property="empno" column="empno"></id>
+        <result property="ename" column="ename"/>
+        <result property="job" column="job"/>
+        <result property="mgr" column="mgr"/>
+        <result property="hiredate" column="hiredate"/>
+        <result property="sal" column="sal"/>
+        <result property="comm" column="comm"/>
+        <result property="deptno" column="deptno"/>
+        <association property="dept" column="deptno" javaType="version01.entity.Dept">
+            <id property="deptno" column="deptno"></id>
+            <!--低版本无效：由于部门表中字段和部门实体类的属性名一致，以下也是可以缺省的-->
+            <id property="deptno" column="deptno"/>
+            <result property="dname" column="dname"/>
+            <result property="loc" column="loc"/>
+        </association>
+    </resultMap>
 </mapper>

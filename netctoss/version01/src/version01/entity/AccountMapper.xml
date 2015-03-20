@@ -9,7 +9,7 @@
 <mapper namespace="version01.dao.AccountDao">
 
     <!--查询出某一页的账务账号数据-->
-    <select id="findByPage" parameterType="version01.vo.AccountPage" resultType="version01.entity.Account">
+    <select id="findByPage" parameterType="version01.page.AccountPage" resultType="version01.entity.Account">
          SELECT child.* FROM
         (
           select * from account
@@ -32,7 +32,7 @@
     </select>
 
     <!--查询总行数-->
-    <select id="findRows" parameterType="version01.vo.AccountPage" resultType="java.lang.Integer">
+    <select id="findRows" parameterType="version01.page.AccountPage" resultType="java.lang.Integer">
         select count(*) from account
         <where>
             <if test="idcard_no!=null &amp;&amp; idcard_no.length()>0">

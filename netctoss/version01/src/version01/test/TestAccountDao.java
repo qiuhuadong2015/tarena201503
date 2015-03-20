@@ -5,7 +5,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import version01.dao.AccountDao;
 import version01.entity.Account;
-import version01.vo.AccountPage;
+import version01.page.AccountPage;
 
 import java.util.List;
 

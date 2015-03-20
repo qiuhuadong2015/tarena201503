@@ -7,6 +7,30 @@ import java.sql.Date;
  * Created by qiuhuadong2014 on 2015/3/13.
  */
 public class Emp implements Serializable {
+
+    public Dept getDept() {
+        return dept;
+    }
+
+    //一个员工只能属于一个部门
+    //追加的关联属性，用于封装关联的部门数据
+    private Dept dept;
+
+    @Override
+    public String toString() {
+        return "Emp{" +
+                "dept=" + dept +
+                ", empno=" + empno +
+                ", ename='" + ename + '\'' +
+                ", job='" + job + '\'' +
+                ", mgr=" + mgr +
+                ", hiredate=" + hiredate +
+                ", sal=" + sal +
+                ", comm=" + comm +
+                ", deptno=" + deptno +
+                '}';
+    }
+
     private Integer empno;
     private String ename;
     private String job;
@@ -78,5 +102,9 @@ public class Emp implements Serializable {
 
     public void setComm(Double comm) {
         this.comm = comm;
+    }
+
+    public void setDept(Dept dept) {
+        this.dept = dept;
     }
 }

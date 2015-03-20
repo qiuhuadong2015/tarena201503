@@ -5,7 +5,7 @@ import version01.entity.Cost;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import version01.vo.CostPage;
+import version01.page.CostPage;
 
 import java.sql.Timestamp;
 import java.util.List;

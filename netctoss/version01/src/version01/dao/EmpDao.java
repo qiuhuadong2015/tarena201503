@@ -52,4 +52,11 @@ public interface EmpDao {
      * @return
      */
     List<Emp> findByIds(Condition condition);
+
+    //以上是Unit03的内容，学习的是spring json
+
+    //以下是Unit04的内容，学习的是多对一映射
+    Emp findById_WithDept_BySubSelect(int id);
+
+    Emp findById_WithDept_ByJoin(int id);
 }

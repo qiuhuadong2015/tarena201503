@@ -2,7 +2,7 @@ package version01.dao;
 
 import version01.annotation.MyMybatisMapper;
 import version01.entity.Account;
-import version01.vo.AccountPage;
+import version01.page.AccountPage;
 
 import java.util.List;
 

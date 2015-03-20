@@ -1,4 +1,4 @@
-package version01.vo;
+package version01.page;
 
 /**
  * Created by qiuhuadong2014 on 2015/3/13.

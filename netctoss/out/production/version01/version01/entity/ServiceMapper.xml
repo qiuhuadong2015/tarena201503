@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.apache.org//dtd mapper 3.0//en"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+        <!--Unit03完成-->
+
+<!--每个实例和实体的访问接口对应一个映射（mapper）文件-->
+<!--namespace的值是实体访问接口的类名，不能错-->
+<mapper namespace="version01.dao.ServiceDao">
+
+    <!--查询某一页数据-->
+    <!--先把关联查询写好，再考虑分页-->
+    <!--关联时，要考虑用哪种join？left还是inner?-->
+        <!--left是保证主表完整。在外键允许为null的时候，就必须用left以保证完整性（否为会丢失外键为null的记录）-->
+        <!--但是，如果外键约束了not null，那么用left和inner是一样的，为了提高效率建议用inner-->
+    <!--其实和账务账号的区别只是多了关联查询，其他都一样-->
+    <select id="findByPage" parameterType="version01.page.ServicePage" resultType="java.util.Map">
+        select
+            s.*,
+            a.idcard_no,
+            a.real_name,
+            c.name as cost_name,
+            c.descr
+        from service s
+        inner join account a
+          on a.account_id=s.account_id
+        inner join cost c
+          on c.cost_id=s.cost_id
+        <where>
+            <if test="os_username!=null &amp;&amp; os_username.length()>0">
+                and s.os_username=#{os_username,jdbcType=VARCHAR}
+            </if>
+            <if test="unix_host!=null &amp;&amp; unix_host.length()>0">
+                and s.unix_host=#{unix_host,jdbcType=VARCHAR}
+            </if>
+            <if test="idcard_no!=null &amp;&amp; idcard_no.length()>0">
+                and a.idcard_no=#{idcard_no,jdbcType=VARCHAR}
+            </if>
+            <if test="status!=null &amp;&amp; status.length()>0 &amp;&amp; !status.equals('-1')">
+                and s.status=#{status,jdbcType=VARCHAR}
+            </if>
+        </where>
+        order by s.service_id asc
+        limit #{begin},#{pageSize}
+    </select>
+    <!--发现其实limit可以直接跟在后面，不需要子查询-->
+    <!--在sql语句里禁止写非sql，包括注释！否则会出错！！-->
+
+    <!--查行数和分页查询的区别，仅仅是分页和查行数的区别，也就是说，除了分页的limit、行数的count（*），其它都一样-->
+    <!--查询总行数-->
+    <select id="findRows" parameterType="version01.page.ServicePage" resultType="java.lang.Integer">
+        select
+          count(*)
+        from service s
+        inner join account a
+        on a.account_id=s.account_id
+        inner join cost c
+        on c.cost_id=s.cost_id
+        <where>
+            <if test="os_username!=null &amp;&amp; os_username.length()>0">
+                and s.os_username=#{os_username,jdbcType=VARCHAR}
+            </if>
+            <if test="unix_host!=null &amp;&amp; unix_host.length()>0">
+                and s.unix_host=#{unix_host,jdbcType=VARCHAR}
+            </if>
+            <if test="idcard_no!=null &amp;&amp; idcard_no.length()>0">
+                and a.idcard_no=#{idcard_no,jdbcType=VARCHAR}
+            </if>
+            <if test="status!=null &amp;&amp; status.length()>0 &amp;&amp; !status.equals('-1')">
+                and s.status=#{status,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <select id="findById" parameterType="java.lang.Integer" resultType="version01.entity.Service">
+        select * from service where service_id=#{id}
+    </select>
+
+    <!--暂停-->
+    <update id="pause" parameterType="java.lang.Integer">
+        update service set status=1,pause_date=now() where service_id=#{id}
+    </update>
+
+    <!--开始-->
+    <update id="start" parameterType="java.lang.Integer">
+        update service set status=0,pause_date=null where service_id=#{id}
+    </update>
+
+    <!--删除-->
+    <update id="delete">
+        update service set status=2,close_date=now() where service_id=#{id}
+    </update>
+
+    <update id="update" parameterType="version01.entity.Service">
+        update service SET
+          cost_id=#{cost_id}
+        where service_id=#{service_id}
+    </update>
+</mapper>

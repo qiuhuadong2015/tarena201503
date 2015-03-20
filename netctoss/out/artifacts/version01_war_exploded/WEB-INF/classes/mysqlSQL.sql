@@ -135,43 +135,50 @@ VALUES(1025,NULL,'kxhxd25','012120',1,'2012-02-20 00:00:00','maqi','20001006','3
 # column login_passwd format a10
 # column real_name format a10
 
---业务信息表
-drop table SERVICE
+# --业务信息表
+# drop table SERVICE
 create table service(
- 	service_id		number(10) constraint service_id_pk primary key,
- 	account_id		number(9) constraint service_account_id_fk
-							references account(account_id) not null,
- 	unix_host		varchar2(15) constraint service_unix_host_fk not null ,
- 	os_username		varchar2(8)	not null,
+ 	service_id		INT(10)  primary key,
+ 	account_id		INT(9) not null,
+# 	constraint service_account_id_fk
+# 							references account(account_id) ,
+	foreign key(account_id) references account(account_id) on delete cascade on update cascade,
+
+ 	unix_host		varchar(15) not null,
+# 	constraint service_unix_host_fk  ,
+ 	os_username		varchar(8)	not null,
  						constraint service_unixhost_osusername_uk
  						unique(unix_host,os_username),
- 	login_passwd	varchar2(30) not null,
- 	status 			char(1) 	constraint service_status_ck
+ 	login_passwd	varchar(30) not null,
+ 	status 			char(1)
 								check ( status in (0,1,2) ),
- 	create_date		date	default sysdate,
- 	pause_date		date,
- 	close_date		date,
- 	cost_id			number(4) constraint service_cost_id_fk
-							references cost(cost_id) not null
+ 	create_date		TIMESTAMP	default now(),
+ 	pause_date		TIMESTAMP,
+ 	close_date		TIMESTAMP,
+ 	cost_id			int(4) not null,
+# 	constraint service_cost_id_fk
+# 							references cost(cost_id)
+	foreign key(cost_id) references cost(cost_id) on delete cascade on update cascade
+
 );
 
 
 
-INSERT INTO SERVICE VALUES (2001,1010,'192.168.0.26','guojing','guo1234','0',sysdate,null,null,1);
+INSERT INTO SERVICE VALUES (2001,1010,'192.168.0.26','guojing','guo1234','0',now(),null,null,1);
 
-INSERT INTO SERVICE VALUES (2002,1011,'192.168.0.26','huangr','huang234','0',sysdate,null,null,1);
+INSERT INTO SERVICE VALUES (2002,1011,'192.168.0.26','huangr','huang234','0',now(),null,null,1);
 
-INSERT INTO SERVICE VALUES (2003,1011,'192.168.0.20','huangr','huang234','0',sysdate,null,null,3);
+INSERT INTO SERVICE VALUES (2003,1011,'192.168.0.20','huangr','huang234','0',now(),null,null,3);
 
-INSERT INTO SERVICE VALUES (2004,1011,'192.168.0.23','huangr','huang234','0',sysdate,null,null,6);
+INSERT INTO SERVICE VALUES (2004,1011,'192.168.0.23','huangr','huang234','0',now(),null,null,6);
 
-INSERT INTO SERVICE VALUES (2005,1019,'192.168.0.26','luwsh','luwu2345','0',sysdate,null,null,4);
+INSERT INTO SERVICE VALUES (2005,1019,'192.168.0.26','luwsh','luwu2345','0',now(),null,null,4);
 
-INSERT INTO SERVICE VALUES (2006,1019,'192.168.0.20','luwsh','luwu2345','0',sysdate,null,null,5);
+INSERT INTO SERVICE VALUES (2006,1019,'192.168.0.20','luwsh','luwu2345','0',now(),null,null,5);
 
-INSERT INTO SERVICE VALUES (2007,1020,'192.168.0.20','weixb','wei12345','0',sysdate,null,null,6);
+INSERT INTO SERVICE VALUES (2007,1020,'192.168.0.20','weixb','wei12345','0',now(),null,null,6);
 
-INSERT INTO SERVICE VALUES (2008,1010,'192.168.0.20','guojing','guo09876','0',sysdate,null,null,6);
+INSERT INTO SERVICE VALUES (2008,1010,'192.168.0.20','guojing','guo09876','0',now(),null,null,6);
 
 
 COMMIT;

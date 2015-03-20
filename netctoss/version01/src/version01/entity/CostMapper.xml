@@ -68,7 +68,7 @@
 
     <!--分页查询-->
     <!--注意：在xml中不能直接写小于号，要用&lt;转义，或者把sql语句写在<![CDATA[的这里]]>    -->
-    <select id="findByPage" parameterType="version01.vo.CostPage" resultType="version01.entity.Cost">
+    <select id="findByPage" parameterType="version01.page.CostPage" resultType="version01.entity.Cost">
         SELECT * FROM cost WHERE cost_id >#{begin} ORDER BY cost_id asc LIMIT 0,#{pageSize}
     </select>
 

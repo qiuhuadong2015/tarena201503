@@ -2,7 +2,7 @@ package version01.dao;
 
 import version01.annotation.MyMybatisMapper;
 import version01.entity.Cost;
-import version01.vo.CostPage;
+import version01.page.CostPage;
 
 import java.util.List;
 

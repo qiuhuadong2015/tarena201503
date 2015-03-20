@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.apache.org//dtd mapper 3.0//en"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="version01.dao.DeptDao">
+
+    <!--Unit04的内容-->
+
+    <!--根据ID查询部门，自动查询出关联的员工数据，一对多嵌套查询映射-->
+    <select id="findById_WithEmps_BySubSelect" parameterType="java.lang.Integer" resultMap="deptMap_BySubSelect">
+        select * from t_dept where deptno=#{id}
+    </select>
+    <select id="findEmps" parameterType="java.lang.Integer" resultType="version01.entity.Emp">
+        select * from t_emp where deptno=#{deptno}
+    </select>
+    <resultMap id="deptMap_BySubSelect" type="version01.entity.Dept">
+        <!--在这里，部门ID还是要写的-->
+        <!--为什么要写这个ID？因为findEmps这个SQL中，有一个#{deptno}，也就是部门表的主键，-->
+        <!--通过这里声明id主键后，调用SQL才能知道#{deptno}的来源-->
+        <id property="deptno" column="deptno" />
+        <!--
+            collection：用来声明一对多的关联属性
+            property：关联属性名
+            javaType：关联属性类型
+            ofType：集合中的对象类型
+            column：关联字段名
+            select：要调用的SQL
+        -->
+        <collection property="emps" column="deptno" javaType="java.util.ArrayList" select="findEmps"
+                    ofType="version01.entity.Emp">
+
+        </collection>
+    </resultMap>
+
+    <select id="findById_WithEmps_ByJoin" parameterType="java.lang.Integer" resultMap="deptMap_ByJoin">
+        select d.*,e.*
+        from t_dept d inner join t_emp e on d.deptno=e.deptno
+        where d.deptno=#{id}
+    </select>
+    <resultMap id="deptMap_ByJoin" type="version01.entity.Dept">
+        <id property="deptno" column="deptno"/>
+        <result property="dname" column="dname"/>
+        <result property="loc" column="loc"/>
+
+        <collection property="emps" column="deptno"
+                    javaType="java.util.ArrayList"
+                    ofType="version01.entity.Emp">
+            <id property="empno" column="empno"></id>
+            <result property="ename" column="ename"/>
+            <result property="job" column="job"/>
+            <result property="mgr" column="mgr"/>
+            <result property="hiredate" column="hiredate"/>
+            <result property="sal" column="sal"/>
+            <result property="comm" column="comm"/>
+            <result property="deptno" column="deptno"/>
+        </collection>
+    </resultMap>
+
+</mapper>

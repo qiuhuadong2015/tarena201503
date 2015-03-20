@@ -1,4 +1,4 @@
-package version01.vo;
+package version01.page;
 
 import org.springframework.stereotype.Component;
 

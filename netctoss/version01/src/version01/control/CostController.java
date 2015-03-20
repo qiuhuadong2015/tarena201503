@@ -6,7 +6,7 @@ import version01.entity.Cost;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import version01.vo.CostPage;
+import version01.page.CostPage;
 
 import javax.annotation.Resource;
 import java.sql.Timestamp;

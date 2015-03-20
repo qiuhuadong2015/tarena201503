@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import version01.dao.AccountDao;
 import version01.entity.Account;
-import version01.vo.AccountPage;
+import version01.page.AccountPage;
 
 import javax.annotation.Resource;
 import java.util.List;
