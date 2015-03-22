@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.apache.org//dtd mapper 3.0//en"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+        <!--Unit04完成-->
+
+<!--每个实例和实体的访问接口对应一个映射（mapper）文件-->
+<!--namespace的值是实体访问接口的类名，不能错-->
+<mapper namespace="version01.dao.RoleDao">
+
+    <!--查询某一页的角色数据，关联查询出角色对应的模块-->
+    <select id="findByPage" parameterType="version01.page.RolePage" resultMap="roleMap">
+        select * from role_info order by role_id limit #{begin},#{pageSize};
+    </select>
+    <select id="findModule" parameterType="java.lang.Integer" resultType="version01.entity.Module">
+        select * from module_info
+        where module_id in(select module_id from role_module where role_id=#{role_id})
+    </select>
+    <!--通过resultMap自动将角色和模块数据装配到modules-->
+    <!--要注意：column的意义，是在一对多概念中的外键的概念！
+    也就是说module_info是多，里面有一个外键表示一，也就是role_id-->
+    <resultMap id="roleMap" type="version01.entity.Role">
+        <id column="role_id" property="role_id"/>
+        <collection property="modules"
+                    javaType="java.util.ArrayList"
+                    column="role_id"
+                    ofType="version01.entity.Module"
+                select="findModule">
+        </collection>
+    </resultMap>
+
+    <!--查询总行数-->
+    <!--由于非常简单非常熟练就没有测试-->
+    <select id="findRows" resultType="java.lang.Integer">
+        select count(*) from role_info
+    </select>
+
+    <!--查询全部的模块-->
+    <select id="findAllModules" resultType="version01.entity.Module">
+        select * from module_info
+    </select>
+
+    <!--新增角色-->
+    <insert id="save" parameterType="version01.entity.Role"
+            keyProperty="role_id" useGeneratedKeys="true">
+        insert into role_info(name) values(#{name,jdbcType=VARCHAR})
+    </insert>
+
+    <!--新增中间表-->
+    <insert id="saveRoleModule" parameterType="java.util.HashMap" >
+        insert into role_module values(
+          #{role_id,jdbcType=NUMERIC},
+          #{module_id,jdbcType=NUMERIC}
+        )
+    </insert>
+
+    <!--根据ID查询角色-->
+    <!--可以复用前面分页查询的roleMap-->
+    <select id="findById" parameterType="java.lang.Integer" resultMap="roleMap">
+        select * from role_info where role_id=#{id}
+    </select>
+
+    <!--修改角色-->
+    <select id="update" parameterType="version01.entity.Role">
+        update role_info set name=#{name,jdbcType=VARCHAR}
+         where role_id=#{role_id,jdbcType=NUMERIC}
+    </select>
+
+    <!--根据角色删除其中间表数据-->
+    <delete id="deleteRoleModule" parameterType="java.lang.Integer">
+        delete from role_module where role_id=#{role_id}
+    </delete>
+
+    <!--删除角色表的角色-->
+    <delete id="deleteRole" parameterType="java.lang.Integer">
+        delete from role_info where role_id=#{role_id}
+    </delete>
+
+</mapper>

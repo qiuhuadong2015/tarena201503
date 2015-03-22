@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.apache.org//dtd mapper 3.0//en"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+        <!--Unit04完成-->
+
+<!--每个实例和实体的访问接口对应一个映射（mapper）文件-->
+<!--namespace的值是实体访问接口的类名，不能错-->
+<mapper namespace="version01.dao.AdminDao">
+
+    <!--查询某一页的管理员数据，关联查询出管理员对应的角色-->
+    <select id="findByPage" parameterType="version01.page.AdminPage" resultMap="adminMap">
+        select * from admin_info
+		where admin_id in(
+			select ai.admin_id from admin_info ai
+			left join admin_role ar on ar.admin_id=ai.admin_id
+			left join role_info ri on ri.role_id=ar.role_id
+		    left join role_module rm on rm.role_id=ri.role_id
+		    <where>
+                <if test="moduleId!=null">
+                    and rm.module_id=#{moduleId,jdbcType=NUMERIC}
+                </if>
+                <if test="roleName!=null &amp;&amp; roleName.length()>0">
+                    and ri.name like concat('%',#{roleName},'%')
+                </if>
+            </where>
+		)order by admin_id limit #{begin},#{pageSize}
+
+    </select>
+    <select id="findRole" parameterType="java.lang.Integer" resultType="version01.entity.Role">
+        select * from role_info
+        where role_id in(select role_id from admin_role where admin_id=#{admin_id})
+    </select>
+    <!--通过resultMap自动将管理员和角色数据装配到roles-->
+    <!--要注意：column的意义，是在一对多概念中的外键的概念！
+    也就是说role_info是多，里面有一个外键表示一，也就是admin_id-->
+    <resultMap id="adminMap" type="version01.entity.Admin">
+        <id column="admin_id" property="admin_id"/>
+        <collection property="roles"
+                    javaType="java.util.ArrayList"
+                    column="admin_id"
+                    ofType="version01.entity.Role"
+                    select="findRole">
+        </collection>
+    </resultMap>
+
+    <!--查询总行数-->
+    <select id="findRows" parameterType="version01.page.AdminPage" resultType="java.lang.Integer">
+        select count(*) from admin_info
+        where admin_id in(
+        select ai.admin_id from admin_info ai
+        left join admin_role ar on ar.admin_id=ai.admin_id
+        left join role_info ri on ri.role_id=ar.role_id
+        left join role_module rm on rm.role_id=ri.role_id
+        <where>
+            <if test="moduleId!=null">
+                and rm.module_id=#{moduleId,jdbcType=NUMERIC}
+            </if>
+            <if test="roleName!=null &amp;&amp; roleName.length()>0">
+                and ri.name like concat('%',#{roleName},'%')
+            </if>
+        </where>
+        )
+    </select>
+
+    <!--更新密码-->
+    <update id="updatePassword" parameterType="java.util.HashMap">
+        update admin_info set password=#{password,jdbcType=VARCHAR}
+        where admin_id in(
+          <foreach collection="ids" separator="," item="id">
+              #{id}
+          </foreach>
+        )
+    </update>
+
+    <!--根据账号查询管理员-->
+    <select id="findByCode" parameterType="java.lang.String" resultType="version01.entity.Admin">
+        select * from admin_info where admin_code=#{adminCode}
+    </select>
+
+    <!--根据管理员ID查询其对应的模块-->
+    <select id="findModulesByAdminId" resultType="version01.entity.Module">
+        select * from module_info
+        where module_id in(
+            select module_id from admin_info ai
+            inner join admin_role ar
+            on ar.admin_id=ai.admin_id
+            inner join role_info ri
+            on ri.role_id=ar.role_id
+            inner join role_module rm
+            on rm.role_id=ri.role_id
+            where ai.admin_id=#{adminId}
+        )order by module_id
+    </select>
+
+</mapper>

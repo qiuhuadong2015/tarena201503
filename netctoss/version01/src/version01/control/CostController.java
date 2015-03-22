@@ -72,8 +72,13 @@ public class CostController {
     }
 
     //第二个版本，添加了分页查询，返回的是根据分页条件（查看页，每页行数）查询的记录
+    //Unit05记录异常日志时添加了一句异常
     @RequestMapping("/findCost.form")
     public String find(CostPage costPage,Model model){
+
+        //Unit05加入一句异常
+        int i=Integer.valueOf("abd");
+
         //注意：以下代码可以封装以便复用，可以封装到CostPage类中
         //查询某一页的数据
         List<Cost> list=costDao.findByPage(costPage);

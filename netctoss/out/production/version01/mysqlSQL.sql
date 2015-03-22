@@ -253,72 +253,82 @@ create table bill_item
 
 
 
---模块表
-drop table MODULE_INFO
+# --模块表
+# drop table MODULE_INFO
 create table module_info(
-		module_id 	number(4) constraint module_info_id_pk primary key,
-		name 		varchar2(50) not null
+		module_id 	int(4) primary key,
+		name 		VARCHAR(50) not null
 );
 
 
---功能表
-drop table FUNCTION_INFO
+# --功能表
+# drop table FUNCTION_INFO
 create table function_info(
-		function_id 	number(8) constraint function_info_id_pk primary key,
-		function_code 	varchar2(50) unique not null,
-  	module_id   		number(4) constraint function_module_id_fk
-                			references module_info(module_id) not null,
-		name 			varchar2(50) not null,
-  	url 				varchar2(100) not null
+		function_id 	int(8)  primary key,
+		function_code 	varchar(50) unique not null,
+  	module_id   		int(4) not null,
+	foreign key(module_id) references module_info(module_id)
+		on delete cascade on update cascade,
+# 		constraint function_module_id_fk references module_info(module_id) ,
+		name 			varchar(50) not null,
+  	url 				varchar(100) not null
 );
 
 
---角色表
-drop table ROLE_INFO;
+# --角色表
+# drop table ROLE_INFO;
 create table role_info(
-		role_id		number(4) 		constraint role_info_id_pk primary key,
-		name 		varchar2(50) 	not null
+		role_id		int(4)  primary key,
+		name 		varchar(50) 	not null
 );
 
 
---角色模块表
-drop table ROLE_MODULE;
+# --角色模块表
+# drop table ROLE_MODULE;
 create table role_module(
-		role_id     number(4) constraint role_module_role_id_fk
-						references role_info(role_id) not null,
-  	module_id   number(4) constraint role_module_module_id_fk
-						references module_info(module_id) not null,
+		role_id     int(4) not null ,
+	foreign key(role_id) references role_info(role_id)
+		on delete cascade on update cascade,
+# 		constraint role_module_role_id_fk references role_info(role_id) ,
+  	module_id   int(4)  not null,
+	foreign key(module_id) references module_info(module_id)
+		on delete cascade on update cascade,
+# 		constraint role_module_module_id_fk references module_info(module_id),
   	constraint role_module_pk primary key(role_id,module_id)
 );
 
 
---管理员表
-drop table ADMIN_INFO
+# --管理员表
+# drop table ADMIN_INFO
 create table admin_info(
-   	admin_id 	number(4) primary key not null,
-   	admin_code 	varchar2(30) unique not null,
-   	password 	varchar2(30) not null,
-   	name 		varchar2(30) not null,
-   	telephone 	varchar2(15),
-   	email 		varchar2(50),
-   	enrolldate 	date default sysdate not null
+   	admin_id 	int(4) primary key not null,
+   	admin_code 	varchar(30) unique not null,
+   	password 	varchar(30) not null,
+   	name 		varchar(30) not null,
+   	telephone 	varchar(15),
+   	email 		varchar(50),
+   	enrolldate 	TIMESTAMP default now() not null
 );
 
 
---管理员角色表
-drop table ADMIN_ROLE
+# --管理员角色表
+# drop table ADMIN_ROLE
 create table admin_role(
-		admin_id	number(8) constraint admin_role_admin_id_fk
-						references admin_info(admin_id) not null,
-  	role_id		number(4) constraint admin_role_role_id_fk
-						references role_info(role_id) not null,
+		admin_id	int(8) not null,
+	foreign key(admin_id) references admin_info(admin_id)
+		on delete cascade on update cascade,
+# 		constraint admin_role_admin_id_fk references admin_info(admin_id) ,
+  	role_id		int(4) not null,
+	foreign key(role_id) references role_info(role_id)
+		on delete cascade on update cascade,
+# 		constraint admin_role_role_id_fk references role_info(role_id),
   	constraint admin_role_pk primary key(admin_id,role_id)
 );
 
 
 
 
---模块表
+# --模块表
 insert into MODULE_INFO values(1,'角色管理');
 insert into MODULE_INFO values(2,'管理员');
 insert into MODULE_INFO values(3,'资费管理');
@@ -326,14 +336,14 @@ insert into MODULE_INFO values(4,'账务账号');
 insert into MODULE_INFO values(5,'业务账号');
 insert into MODULE_INFO values(6,'账单管理');
 insert into MODULE_INFO values(7,'报表');
---角色表
+# --角色表
 insert into role_info values(100,'管理员');
 insert into role_info values(200,'营业员');
 insert into role_info values(300,'经理');
 insert into role_info values(400,'aaa');
 insert into role_info values(500,'bbb');
 insert into role_info values(600,'ccc');
---角色模块表
+# --角色模块表
 insert into role_module values(100,1);
 insert into role_module values(100,2);
 insert into role_module values(200,3);
@@ -341,14 +351,14 @@ insert into role_module values(200,4);
 insert into role_module values(200,5);
 insert into role_module values(200,6);
 insert into role_module values(300,7);
---管理员表
+# --管理员表
 insert into admin_info values(2000,'admin','123','ADMIN','123456789','admin@tarena.com.cn',sysdate);
 insert into admin_info values(3000,'zhangfei','123','ZhangFei','123456789','zhangfei@tarena.com.cn',sysdate);
 insert into admin_info values(4000,'liubei','123','LiuBei','123456789','liubei@tarena.com.cn',sysdate);
 insert into admin_info values(5000,'caocao','123','CaoCao','123456789','caocao@tarena.com.cn',sysdate);
 insert into admin_info values(6000,'aaa','123','AAA','123456789','aaa@tarena.com.cn',sysdate);
 insert into admin_info values(7000,'bbb','123','BBB','123456789','bbb@tarena.com.cn',sysdate);
---管理员角色表
+# --管理员角色表
 insert into admin_role values(2000,100);
 insert into admin_role values(3000,200);
 insert into admin_role values(4000,300);
